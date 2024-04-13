@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document2</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
+        </script>
+    <script>
+        $(document).ready(function () {
+
+            function sendAjax(action, callback) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'index.php', // AJAX handler URL
+                    data: { action: action },
+                    dataType: 'json',
+                    success: function (response) {
+                        callback(response);
+                    },
+                    error: function () {
+                        console.error('Error in AJAX request');
+                    }
+                });
+            }
+            sendAjax('increaseScore', function (response) {
+                if (response.success) {
+                    var game = response.message;
+                    console.log(game);
+                } else {
+                    console.error(response.message);
+                }
+            });
+
+            function getActiveElements() {
+                return $('[data-post]');
+            }
+            console.log(getActiveElements());
+            function handleClickables(element) {
+                var action = element.data('post');
+                var target = element.data('target');
+                sendAjax(action, function (response) {
+                    if (response.success) {
+                        var message = response.message;
+                        console.log(message);
+                        var content = response.content;
+                        console.log(content);
+                        if (target) {
+                            $(target).html(content);
+                        }
+                    } else {
+                        console.error(response.message);
+                    }
+                });
+            }
+            function handleOnLoad(element){
+                var action = element.data('post');
+                var target = element.data('target');
+                sendAjax(action, function (response) {
+                    if (response.success) {
+                        var message = response.message;
+                        console.log(message);
+                        var content = response.content;
+                        console.log(content);
+                        if (target) {
+                            $(target).html(content);
+                        }
+                    } else {
+                        console.error(response.message);
+                    }
+                });
+            }
+        
+            function bindEvents() {
+                getActiveElements().each(function () {
+                    var element = $(this);
+                    var action = element.data('post');
+                    var target = element.data('target');
+
+                    console.log(element);
+                    // what data attribute is set
+                    console.log(element.data());
+                    
+                    // if it's a button or an input of type button we bind the click event
+                    if (element.is('button') || element.is('input[type="button"]')) {
+                        element.on('click', function () {
+                            handleClickables(element);
+                        });
+
+                        // next element 
+                        return;
+                    }
+
+                    // if it's not and it has the data-load attribute we bind the load event
+                    if (element.data('load') !== undefined) {
+                        handleOnLoad(element);
+                        console.log('loaded');
+
+                        // next element
+                        return;
+                    }
+                    
+                });
+            }
+
+            bindEvents();
+
+              // AJAX handler to check if the DOM got updated
+        $(document).ajaxComplete(function () {
+            // this needs throttling
+            
+
+            console.log('AJAX request completed');
+    
+        });
+
+        });
+
+      
+    </script>
+</head>
+
+<body>
+    <header data-post="menu" data-load data-target="header">
+
+    </header>
+    
+</body>
+
+</html>
