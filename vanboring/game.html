@@ -20,101 +20,78 @@
                     success: function (response) {
                         callback(response);
                     },
-                    error: function () {
-                        console.error('Error in AJAX request');
+                    error: function ( jqXHR, textStatus, errorThrown) {
+                        // console.error('Error in AJAX request');
+                        console.error(jqXHR);
+                        console.error(textStatus);
+                        console.error(errorThrown);
                     }
                 });
             }
-            sendAjax('increaseScore', function (response) {
-                if (response.success) {
-                    var game = response.message;
-                    console.log(game);
-                } else {
-                    console.error(response.message);
-                }
-            });
-
-            function getActiveElements() {
-                return $('[data-post]');
-            }
-            console.log(getActiveElements());
-            function handleClickables(element) {
-                var action = element.data('post');
-                var target = element.data('target');
-                sendAjax(action, function (response) {
-                    if (response.success) {
-                        var message = response.message;
-                        console.log(message);
-                        var content = response.content;
-                        console.log(content);
-                        if (target) {
-                            $(target).html(content);
-                        }
-                    } else {
-                        console.error(response.message);
-                    }
-                });
-            }
-            function handleOnLoad(element){
-                var action = element.data('post');
-                var target = element.data('target');
-                sendAjax(action, function (response) {
-                    if (response.success) {
-                        var message = response.message;
-                        console.log(message);
-                        var content = response.content;
-                        console.log(content);
-                        if (target) {
-                            $(target).html(content);
-                        }
-                    } else {
-                        console.error(response.message);
-                    }
-                });
-            }
-        
-            function bindEvents() {
-                getActiveElements().each(function () {
-                    var element = $(this);
-                    var action = element.data('post');
-                    var target = element.data('target');
-
-                    console.log(element);
-                    // what data attribute is set
-                    console.log(element.data());
-                    
-                    // if it's a button or an input of type button we bind the click event
-                    if (element.is('button') || element.is('input[type="button"]')) {
-                        element.on('click', function () {
-                            handleClickables(element);
-                        });
-
-                        // next element 
-                        return;
-                    }
-
-                    // if it's not and it has the data-load attribute we bind the load event
-                    if (element.data('load') !== undefined) {
-                        handleOnLoad(element);
-                        console.log('loaded');
-
-                        // next element
-                        return;
-                    }
-                    
-                });
-            }
-
-            bindEvents();
-
-              // AJAX handler to check if the DOM got updated
-        $(document).ajaxComplete(function () {
-            // this needs throttling
             
 
-            console.log('AJAX request completed');
-    
-        });
+            // We bind a click event to the whole document and handle "everything"
+            $(document).on('click', function (e) {
+                // if there is no data-post attribute we return
+                if (!e.target.hasAttribute('data-post')) {
+                    return;
+                }
+                // Before we write the stuff we test it with a console.log
+                console.log(e.target);
+                // We get the value of the data-post attribute
+                var action = e.target.getAttribute('data-post');
+                console.log(action)
+                // We get the value of the data-target attribute
+                var targetQuery = e.target.getAttribute('data-target');
+                // if there is no target we return
+                if (!targetQuery) {
+                    console.error('Target not found');
+                    return;
+                }
+                // We call the sendAjax function with the action and a callback function
+                sendAjax(action, function (response) {
+                    // We get the target element
+                    var target = $(targetQuery);
+                    // if there is no target in the DOM we return
+                    if (!target.length) {
+                        console.error('Target not found');
+                        return;
+                    }
+                    console.log(target)
+                    // We write the response to the target element
+                    console.log(response)
+                    // if the response is successful we write the content to the target
+                    if (response.success) {
+                        target.html(response.content);
+                    } else {
+                        // if the response is not successful we write the error to console
+                        console.error(response.message);
+                    }
+                    
+                });
+            });
+            function handleLoadables(index, element) {
+                // We get the value of the data-post attribute
+                var action = element.getAttribute('data-post');
+                // We get the value of the data-target attribute
+                var targetQuery = element.getAttribute('data-target');
+                // We call the sendAjax function with the action and a callback function
+                sendAjax(action, function (response) {
+                    // We get the target element
+                    var target = $(targetQuery);
+                    // if there is no target we return
+                    if (!target.length) {
+                        console.error('Target not found');
+                        return;
+                    }
+                    // We write the response to the target element
+                    target.html(response.content);
+                    // remove the data-load attribute
+                    $(element).removeAttr('data-load');
+                });
+            }
+            // on load we search for elements with the data-load attribute
+            $('[data-load]').each(handleLoadables);
 
         });
 
@@ -126,7 +103,8 @@
     <header data-post="menu" data-load data-target="header">
 
     </header>
-    
+    <button data-post="startGame" data-target="output"></button>
+    <output></output>
 </body>
 
 </html>
