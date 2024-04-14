@@ -27,16 +27,32 @@ function startGame() {
         'success' => true, 'message' => 'Game started', 'content' => $content];
 }
 
-function menu() {
+function menu($gameActive = null, $saveExists = null) {
+    if (!$gameActive) {
+        $gameActive = false;
+    }
+    if (!$saveExists) {
+        $saveExists = false;
+    }
     // Menu logic
+    $pauseButton = $gameActive ? '<button data-post="pauseGame" data-target="main">PAUSE</button>' : '';
+    $loadButton = $saveExists ? '<button data-post="loadGame" data-target="main">LOAD</button>' : '';
+    $saveButton = $gameActive ? '<button data-post="saveGame" data-target="main">SAVE</button>' : '';
+    $startButton = $gameActive ? '' : '<button data-post="startGame" data-target="main">NEW</button>';
     $content = <<<HTML
         <nav id="menu">
-            <button data-post="startGame" data-target="main">NEW</button>
-            <button data-post="loadGame" data-target="main">LOAD</button>
+            $pauseButton
+            $loadButton
+            $saveButton
+            $startButton
         </nav>
     HTML;
     return [
         'success' => true, 'message' => 'Menu loaded', 'content' => $content];
+}
+
+function menuFresh() {
+    return menu();
 }
 function loadGame() {
     // Load game logic
@@ -56,7 +72,7 @@ $actionMap = [
     'fetchInventory' => 'fetchInventory',
     'startGame' => 'startGame',
     'loadGame' => 'loadGame',
-    'menu' => 'menu'
+    'menuFresh' => 'menuFresh'
 ];
 
 // Handle AJAX request

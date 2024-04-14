@@ -1,6 +1,89 @@
-header {
-    background-color: #333;
+/* reset lite */
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, blockquote, figure, fieldset, legend, textarea, pre, iframe, hr, form, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+    margin: 0;
+    padding: 0;
+}
+
+/* respect dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-primary: #0d6efd;
+        --color-secondary: #6c757d;
+    }
+    body {
+        background-color: #333;
+        color: white;
+    }
+}
+
+/* respect light mode */
+@media (prefers-color-scheme: light) {
+    :root {
+        --color-primary: #0d6efd;
+        --color-secondary: #6c757d;
+    }
+    body {
+        background-color: white;
+        color: black;
+    }
+}
+
+button {
+   
+    border: none;
+
+    cursor: pointer;
+    border-radius: 0.25em;
+
+    font-weight: bold;
+
+    transition: background-color 0.3s;
+    /* black drop shadow, neo-brutal style */
+    box-shadow: 0.25em 0.25em 0 0.04em black;
+}
+button:not(:disabled) {
+    background-color: var(--color-primary);
     color: white;
+}
+
+
+button:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+button:active:not(:disabled) {
+    filter: brightness(0.9);
+    box-shadow: none;
+    /* move to the position of the shadow */
+    transform: translate(0.25em, 0.25em);
+}
+
+button:disabled {
+    background-color: var(--color-secondary);
+    color: white;
+    cursor: not-allowed;
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  
+  
+    margin: 0;
+    padding: 0;
+}
+
+
+header {
+
     
-    padding: 1em;
+}
+
+/* body consists of header, main and footer */
+body {
+
+    min-height: 100vh;
 }
