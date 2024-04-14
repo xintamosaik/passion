@@ -31,8 +31,8 @@ function menu() {
     // Menu logic
     $content = <<<HTML
         <nav id="menu">
-            <button data-post="startGame" data-target="body">NEW</button>
-            <button data-post="loadGame" data-target="body">LOAD</button>
+            <button data-post="startGame" data-target="main">NEW</button>
+            <button data-post="loadGame" data-target="main">LOAD</button>
         </nav>
     HTML;
     return [
