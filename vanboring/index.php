@@ -10,4 +10,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     // Normal page load
     echo file_get_contents('game.html');
 }
-?>
