@@ -83,4 +83,4 @@ function handleAjax($action) {
     }
     return ['error' => 'Invalid action'];
 }
-?>
+
