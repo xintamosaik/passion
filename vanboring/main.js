@@ -18,7 +18,7 @@ $(document).ready(function () {
         });
     }
     
-
+   
     // We bind a click event to the whole document and handle "everything"
     $(document).on('click', function (e) {
         // if there is no data-post attribute we return

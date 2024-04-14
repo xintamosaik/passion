@@ -19,8 +19,13 @@ function startGame() {
     // Start game logic
     $content = <<<HTML
         <div id="game">
-            <h1>Welcome to the game!</h1>
-            <p>Game content goes here...</p>
+            <div id="swipe-space">
+                <div id="card"  draggable="true">
+                    <div id="emoji">🎮</div>
+                    <h1>Start?</h1>
+                    <p>Swipe to start the game...</p>
+                </div>
+            </div>
         </div>
     HTML;
     return [
