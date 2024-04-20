@@ -13,13 +13,16 @@
         document.addEventListener('DOMContentLoaded', function(){
             console.log('DOM is ready');
 
-            timeLeft();
+            setInterval(showTime, 1000);
             
         });
 
-  
+        const startDate = new Date();
+        // startDate.setDate(startDate.getDate() - 1);
+        startDate.setHours(startDate.getHours() - 35);
         const dateEnd = new Date();
-        dateEnd.setDate(dateEnd.getDate() + 2);
+        //dateEnd.setDate(dateEnd.getDate() + 2);
+        dateEnd.setHours(dateEnd.getHours() + 5);
         function showTime(){
             
             
@@ -51,11 +54,26 @@
             
             const timeLeft = `${daysLeftString} days and ${hoursLeftString}:${minutesLeftString}:${secondsLeftString}`;
             console.log(timeLeft);
+
             const timeLeftElement = document.querySelector('time-left');
             timeLeftElement.innerText = timeLeft + ' left';
+
+
+            const elapsed = dateNow - startDate;
+            console.log(elapsed);
+            const timeFrame = dateEnd - startDate;
+            console.log(timeFrame);
+
+            const progress = elapsed / timeFrame;
+            console.log(progress);
+
+            const footer = document.querySelector('footer');
+            // Construct a left to right gradient
+            footer.style.background = `linear-gradient(to right, #a00a ${progress * 100}%, #eee3 ${progress * 100}%)`;
+
         }
 
-        setInterval(showTime, 1000);
+       
     </script>
 </head>
 <body style="display:grid; height: 100vh; grid-template-rows: 30px 1fr 30px;">
