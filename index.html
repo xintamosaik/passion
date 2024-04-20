@@ -1,20 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    
+
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="base.css">
-    
+    <style>
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        card-space {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 100%;
+            min-width: 80%;
+            background-color: darkolivegreen;
+            border: 1px solid black;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 10px;
+        }
+
+        swipe-card {
+            display: block;
+            min-width: 180px;
+            max-width: 80%;
+            /*aspect ratio like a usual card*/
+            aspect-ratio: 1 / 1.5;
+            background-color: var(--color-background);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 10px;
+            transform-origin: bottom center;
+        }
+    </style>
     <script>
-      
-        document.addEventListener('DOMContentLoaded', function(){
+
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM is ready');
 
             setInterval(showTime, 1000);
-            
+
+            swipeCard = document.querySelector('swipe-card');
+            swipeCard.addEventListener('click', function () {
+                console.log('Card clicked');
+            });
+            let holdPosition = null;
+            let holdTime = null;
+            let holdTimeEnd = null;
+            let holdTimeStart = null;
+            let holdTimeTotal = null;
+            let holdPositionEnd = null;
+            let cardHold = false;
+            swipeCard.addEventListener('touchstart', function (e) {
+                console.log('started holding card');
+                holdPosition = e.touches[0].clientX;
+                holdTimeStart = new Date();
+
+                // start observing the touchmove event
+                
+                cardHold = true;
+            });
+
+            swipeCard.addEventListener('touchmove', function (e) {
+                    if (cardHold) {
+                        holdPositionEnd = e.touches[0].clientX;
+                        holdTimeEnd = new Date();
+                        holdTimeTotal = holdTimeEnd - holdTimeStart;
+                        const holdDistance = holdPositionEnd - holdPosition;
+                       
+                        console.log('holdDistance', holdDistance);
+
+                        // move the card
+                        // swipeCard.style.transform = `translateX(${holdDistance}px)`;
+                        // the card should move with the finger but the base should stay and it should instead rotate around the basis
+                        // the origin of the rotation should be the basis of the card
+                        // the card should rotate around the y-axis
+                        const maxDistance = 30;
+                        const rotateDegree = holdDistance / maxDistance * 30 /12;
+                        console.log('rotateDegree', rotateDegree);
+                        swipeCard.style.transform = `rotate(${rotateDegree}deg)`;
+
+                        // 
+                    }
+                });
+            swipeCard.addEventListener('touchend', function () {
+                console.log('stopped holding card');
+                cardHold = false;
+            });
         });
 
         const startDate = new Date();
@@ -23,13 +103,13 @@
         const dateEnd = new Date();
         //dateEnd.setDate(dateEnd.getDate() + 2);
         dateEnd.setHours(dateEnd.getHours() + 5);
-        function showTime(){
-            
-            
+        function showTime() {
+
+
             const dateNow = new Date();
             const timeStamp = dateNow.getTime();
             const timeStampEnd = dateEnd.getTime();
-            
+
             const diff = timeStampEnd - timeStamp;
             const milliseconds = 1000;
             const seconds = 60;
@@ -41,7 +121,7 @@
             const minutesLeft = secondsLeft / seconds;
             const hoursLeft = minutesLeft / minutes;
             const daysLeft = hoursLeft / hours;
-      
+
             const daysLeftInt = Math.floor(daysLeft);
             const hoursLeftInt = Math.floor(hoursLeft % hours);
             const minutesLeftInt = Math.floor(minutesLeft % minutes);
@@ -51,21 +131,21 @@
             const minutesLeftString = minutesLeftInt < 10 ? '0' + minutesLeftInt : minutesLeftInt;
             const hoursLeftString = hoursLeftInt < 10 ? '0' + hoursLeftInt : hoursLeftInt;
             const daysLeftString = daysLeftInt < 10 ? '0' + daysLeftInt : daysLeftInt;
-            
+
             const timeLeft = `${daysLeftString} days and ${hoursLeftString}:${minutesLeftString}:${secondsLeftString}`;
-            console.log(timeLeft);
+
 
             const timeLeftElement = document.querySelector('time-left');
             timeLeftElement.innerText = timeLeft + ' left';
 
 
             const elapsed = dateNow - startDate;
-            console.log(elapsed);
+
             const timeFrame = dateEnd - startDate;
-            console.log(timeFrame);
+
 
             const progress = elapsed / timeFrame;
-            console.log(progress);
+
 
             const footer = document.querySelector('footer');
             // Construct a left to right gradient
@@ -73,19 +153,30 @@
 
         }
 
-       
+
     </script>
 </head>
-<body style="display:grid; height: 100vh; grid-template-rows: 30px 1fr 30px;">
+
+<body style="display:grid; min-height: 100vh; grid-template-rows: 30px 1fr 30px;">
     <header>
-        #
+        <output id="statistics" style="display:block; text-align: center;">
+            PR = | TM = | SH = | MH =
+        </output>
     </header>
     <main>
+        <card-space>
+            <swipe-card>
+                <h1>Card 1</h1>
+                <p>Some text</p>
+            </swipe-card>
 
+
+        </card-space>
     </main>
     <footer style="display: flex; justify-content: center;">
         <time-left style="font-size: 1.5em;"></time-left>
 
     </footer>
 </body>
+
 </html>
