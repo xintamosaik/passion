@@ -1,0 +1,31 @@
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+card-space {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+    min-width: 80%;
+    background-color: darkolivegreen;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 10px;
+}
+
+swipe-card {
+    display: block;
+
+
+    /*aspect ratio like a usual card*/
+    aspect-ratio: 1 / 1.5;
+    background-color: var(--color-background);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 10px;
+    transform-origin: bottom center;
+}
