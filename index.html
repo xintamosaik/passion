@@ -43,24 +43,24 @@
     </style>
 
     <script>
-            const MILLISECONDS = 1000;
-            const SECONDS = 60;
-            const MINUTES = 60;
-            const HOURS = 24;
-            const DAYS = 365;
-            const deviceWidth = window.innerWidth;
-            const deviceHeight = window.innerHeight;
+        const MILLISECONDS = 1000;
+        const SECONDS = 60;
+        const MINUTES = 60;
+        const HOURS = 24;
+        const DAYS = 365;
+        const deviceWidth = window.innerWidth;
+        const deviceHeight = window.innerHeight;
 
-            let holdPosition = null;
-            let holdTime = null;
-            let holdTimeEnd = null;
-            let holdTimeStart = null;
-            let holdTimeTotal = null;
-            let holdPositionEnd = null;
-            let cardHold = false;
+        let holdPosition = null;
+        let holdTime = null;
+        let holdTimeEnd = null;
+        let holdTimeStart = null;
+        let holdTimeTotal = null;
+        let holdPositionEnd = null;
+        let cardHold = false;
 
-            const MAX_ROTATION = 33;
-            const MAX_DISTANCE = deviceWidth / 2;
+        const MAX_ROTATION = 33;
+        const MAX_DISTANCE = deviceWidth / 2;
         document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM is ready');
 
@@ -84,7 +84,7 @@
                 registerSwipeStart(e.touches[0].clientX);
             });
 
-            function observeMouseMove (e) {
+            function observeMouseMove(e) {
                 if (!cardHold) {
                     return;
                 }
@@ -95,18 +95,13 @@
                 console.log('started holding card');
                 MAIN.addEventListener('mousemove', observeMouseMove);
                 registerSwipeStart(e.clientX);
-                
+
             });
-            
-            
-           
 
             function observeSwipe(positionX) {
                 if (!cardHold) {
                     return;
                 }
-
-
 
                 const HOLD_DISTANCE = positionX - holdPosition;
                 const ROTATE_DEGREE = HOLD_DISTANCE / MAX_DISTANCE * 45;
@@ -121,9 +116,9 @@
                 const HUE = CARD_ROTATION / MAX_ROTATION * 60 - 60;
                 const SATURATION = Math.abs(CARD_ROTATION / MAX_ROTATION * 50);
                 const LIGHTNESS = Math.abs(CARD_ROTATION / MAX_ROTATION * 25);
-         
+
                 MAIN.style.backgroundColor = `hsl(${HUE}, ${SATURATION}%, ${LIGHTNESS}%)`;
-         
+
 
 
             }
@@ -132,38 +127,38 @@
                 observeSwipe(e.touches[0].clientX);
             });
 
-            
+
 
 
             function registerSwipeEnd() {
-                
+
                 cardHold = false;
 
                 const CURRENT_TRANSFORM = parseInt(SWIPE_CARD.style.transform.split('(')[1].split(')')[0]);
-            
+
                 // if the degree is less then 7 degree reset it back to 0
                 if (Math.abs(CURRENT_TRANSFORM) < 22) {
                     SWIPE_CARD.style.transform = `rotate(0deg)`;
                     MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
                 }
 
-                cardHold = false; 
+                cardHold = false;
             }
 
             MAIN.addEventListener('mouseup', function (e) {
-           
+
                 MAIN.removeEventListener('mousemove', observeMouseMove);
-            
-                registerSwipeEnd();     
+
+                registerSwipeEnd();
             });
 
             SWIPE_CARD.addEventListener('touchend', function () {
-           
-                registerSwipeEnd()   
-            });
-            
 
-                
+                registerSwipeEnd()
+            });
+
+
+
         });
 
         const startDate = new Date();
@@ -180,7 +175,7 @@
             const timeStampEnd = dateEnd.getTime();
 
             const diff = timeStampEnd - timeStamp;
-       
+
 
             const secondsLeft = diff / MILLISECONDS;
             const minutesLeft = secondsLeft / SECONDS;
