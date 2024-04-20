@@ -1,44 +1,131 @@
-const MILLISECONDS = 1000;
-const SECONDS = 60;
-const MINUTES = 60;
-const HOURS = 24;
-const DAYS = 365;
-const deviceWidth = window.innerWidth;
-const deviceHeight = window.innerHeight;
+// ts-check
 
+/**
+ * @var {number} MILLISECONDS
+ * @description Number of milliseconds in a second
+ * @constant
+ */
+const MILLISECONDS = 1000;
+
+/**
+ * @var {number} SECONDS
+ * @description Number of seconds in a minute
+ * @constant
+ */
+const SECONDS = 60;
+
+/**
+ * @var {number} MINUTES
+ * @description Number of minutes in an hour
+ * @constant
+ */
+const MINUTES = 60;
+
+/**
+ * @var {number} HOURS
+ * @description Number of hours in a day
+ * @constant
+ */
+const HOURS = 24;
+
+/**
+ * @var {number} DAYS
+ * @description Number of days in a year
+ * @constant
+ */
+const DAYS = 365;
+
+/**
+ * @var {number} DEVICE_WIDTH
+ * @description Width of the device screen
+ * @constant
+ */
+const DEVICE_WIDTH = window.innerWidth;
+
+/**
+ * @var {number} DEVICE_HEIGHT
+ * @description Height of the device screen
+ * @constant
+ */
+const DEVICE_HEIGHT = window.innerHeight;
+
+/**
+ * @var {number} holdPosition
+ * @description a position of the mouse or touch when the swipe starts
+ */
 let holdPosition = null;
-let holdTime = null;
-let holdTimeEnd = null;
-let holdTimeStart = null;
-let holdTimeTotal = null;
-let holdPositionEnd = null;
+
+/**
+ * @var {boolean} cardHold
+ * @description a flag to indicate if the card is being held
+ * @default false
+ */
 let cardHold = false;
 
+/**
+ * @var {number} MAX_ROTATION
+ * @description Maximum rotation of the card in degrees
+ * @constant 
+ * 
+ * @default 33
+ */
 const MAX_ROTATION = 33;
-const MAX_DISTANCE = deviceWidth / 2;
+
+/**
+ * @var {number} MAX_DISTANCE
+ * @description Maximum distance the card can be swiped
+ * @constant
+ * 
+ * @default DEVICE_WIDTH / 2
+ */
+const MAX_DISTANCE = DEVICE_WIDTH / 2;
+
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM is ready');
 
-    setInterval(showTime, 1000)
+    MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
 
+    setInterval(showTime, 1000);
+
+    /**
+     * @var {HTMLElement} MAIN
+     * 
+     * @description The main element of the document
+     * @constant
+     */
     const MAIN = document.querySelector('main');
+
+    /**
+     * @var {HTMLElement} SWIPE_CARD
+     *
+     * @description The swipe card element
+     * @constant
+     */
     const SWIPE_CARD = document.querySelector('swipe-card');
 
-    SWIPE_CARD.addEventListener('click', function () {
-        console.log('Card clicked');
-    });
-
+    /**
+     * @description Registers the start of the swipe. It sets the hold position and sets the cardHold flag to true
+     * 
+     * @param {number} positionX - The x position of the mouse or touch
+     * 
+     * @returns {void}
+     */
     function registerSwipeStart(positionX) {
-        MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
-        holdPosition = positionX
-        holdTimeStart = new Date();
+        holdPosition = positionX;
         cardHold = true;
     }
+
     SWIPE_CARD.addEventListener('touchstart', function (e) {
-        console.log('started holding card');
         registerSwipeStart(e.touches[0].clientX);
     });
 
+
+    /**
+     * @description Observes the mouse move event and calls the observeSwipe function.
+     * @param {MouseEvent} e - The mouse event
+     *
+     * @returns {void}
+     */
     function observeMouseMove(e) {
         if (!cardHold) {
             return;
@@ -47,12 +134,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     SWIPE_CARD.addEventListener('mousedown', function (e) {
-        console.log('started holding card');
         MAIN.addEventListener('mousemove', observeMouseMove);
         registerSwipeStart(e.clientX);
-
     });
 
+    /**
+     * @description Observes the swipe event and rotates the card based on the swipe distance 
+     * @param {number} positionX - The x position of the mouse or touch
+     *
+     * @returns {void}
+     */
     function observeSwipe(positionX) {
         if (!cardHold) {
             return;
@@ -109,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     SWIPE_CARD.addEventListener('touchend', function () {
 
-        registerSwipeEnd()
+        registerSwipeEnd();
     });
 
 
