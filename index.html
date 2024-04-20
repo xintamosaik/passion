@@ -59,45 +59,56 @@
             let holdPositionEnd = null;
             let cardHold = false;
 
-            const MAX_ROTAION = 33;
+            const MAX_ROTATION = 33;
             const MAX_DISTANCE = deviceWidth / 2;
 
-            swipeCard = document.querySelector('swipe-card');
-            swipeCard.addEventListener('click', function () {
+            const MAIN = document.querySelector('main');
+
+            const SWIPE_CARD = document.querySelector('swipe-card');
+            SWIPE_CARD.addEventListener('click', function () {
                 console.log('Card clicked');
             });
             
-            swipeCard.addEventListener('touchstart', function (e) {
+            SWIPE_CARD.addEventListener('touchstart', function (e) {
                 holdPosition = e.touches[0].clientX;
                 holdTimeStart = new Date();
                 cardHold = true;
             });
 
-            swipeCard.addEventListener('touchmove', function (e) {
+
+
+            SWIPE_CARD.addEventListener('touchmove', function (e) {
                     if (cardHold) {
                         holdPositionEnd = e.touches[0].clientX;
                     
                         const HOLD_DISTANCE = holdPositionEnd - holdPosition;
                         const ROTATE_DEGREE = HOLD_DISTANCE / MAX_DISTANCE * 45 ;
                         const ROTATE_DEGREE_ABS = Math.abs(ROTATE_DEGREE);
-                        const TOO_MUCH_ROTATION = ROTATE_DEGREE_ABS > MAX_ROTAION;
+                        const TOO_MUCH_ROTATION = ROTATE_DEGREE_ABS > MAX_ROTATION;
                         const ROTATION_DIRECTION = ROTATE_DEGREE > 0 ? 1 : -1;
-                        const CARD_ROTATION = TOO_MUCH_ROTATION ? MAX_ROTAION * ROTATION_DIRECTION : ROTATE_DEGREE;
+                        const CARD_ROTATION = TOO_MUCH_ROTATION ? MAX_ROTATION * ROTATION_DIRECTION : ROTATE_DEGREE;
                     
-                        swipeCard.style.transform = `rotate(${CARD_ROTATION}deg)`;
+                        SWIPE_CARD.style.transform = `rotate(${CARD_ROTATION}deg)`;
 
+                        // color main with degree
+                        const hue = CARD_ROTATION / MAX_ROTATION * 60 - 60;
+                        const saturation = Math.abs(CARD_ROTATION / MAX_ROTATION * 50);
+                        const lightness = Math.abs(CARD_ROTATION / MAX_ROTATION * 25);
+                        console.log(hue, saturation)
+                        MAIN.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
                         // 
                     }
                 });
-            swipeCard.addEventListener('touchend', function () {
+            SWIPE_CARD.addEventListener('touchend', function () {
                 console.log('stopped holding card');
                 cardHold = false;
 
-                const CURRENT_TRANSFORM = parseInt(swipeCard.style.transform.split('(')[1].split(')')[0]);
+                const CURRENT_TRANSFORM = parseInt(SWIPE_CARD.style.transform.split('(')[1].split(')')[0]);
                 console.log (CURRENT_TRANSFORM);
                 // if the degree is less then 7 degree reset it back to 0
                 if (Math.abs(CURRENT_TRANSFORM) < 22) {
-                    swipeCard.style.transform = `rotate(0deg)`;
+                    SWIPE_CARD.style.transform = `rotate(0deg)`;
+                    MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
                 }
             });
         });
