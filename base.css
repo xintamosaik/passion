@@ -1,0 +1,39 @@
+
+
+/* Respect dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #fff;
+    --color-background: #333;
+  }
+  
+}
+
+/* Respect light mode */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-text: #333;
+    --color-background: #fff;
+  }
+}
+
+/* Respect no preference */
+@media (prefers-color-scheme: no-preference) {
+  :root {
+    --color-text: #333;
+    --color-background: #fff;
+  }
+}
+
+body {
+  max-width: 800px;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 0;
+}
+
+html {
+  background-color: black;
+}

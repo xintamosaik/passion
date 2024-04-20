@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="base.css">
+    
+    <script>
+      
+        document.addEventListener('DOMContentLoaded', function(){
+            console.log('DOM is ready');
+
+            timeLeft();
+            
+        });
+
+  
+        const dateEnd = new Date();
+        dateEnd.setDate(dateEnd.getDate() + 2);
+        function showTime(){
+            
+            
+            const dateNow = new Date();
+            const timeStamp = dateNow.getTime();
+            const timeStampEnd = dateEnd.getTime();
+            
+            const diff = timeStampEnd - timeStamp;
+            const milliseconds = 1000;
+            const seconds = 60;
+            const minutes = 60;
+            const hours = 24;
+            const days = 365;
+
+            const secondsLeft = diff / milliseconds;
+            const minutesLeft = secondsLeft / seconds;
+            const hoursLeft = minutesLeft / minutes;
+            const daysLeft = hoursLeft / hours;
+      
+            const daysLeftInt = Math.floor(daysLeft);
+            const hoursLeftInt = Math.floor(hoursLeft % hours);
+            const minutesLeftInt = Math.floor(minutesLeft % minutes);
+            const secondsLeftInt = Math.floor(secondsLeft % seconds);
+
+            const secondsLeftString = secondsLeftInt < 10 ? '0' + secondsLeftInt : secondsLeftInt;
+            const minutesLeftString = minutesLeftInt < 10 ? '0' + minutesLeftInt : minutesLeftInt;
+            const hoursLeftString = hoursLeftInt < 10 ? '0' + hoursLeftInt : hoursLeftInt;
+            const daysLeftString = daysLeftInt < 10 ? '0' + daysLeftInt : daysLeftInt;
+            
+            const timeLeft = `${daysLeftString} days and ${hoursLeftString}:${minutesLeftString}:${secondsLeftString}`;
+            console.log(timeLeft);
+            const timeLeftElement = document.querySelector('time-left');
+            timeLeftElement.innerText = timeLeft + ' left';
+        }
+
+        setInterval(showTime, 1000);
+    </script>
+</head>
+<body style="display:grid; height: 100vh; grid-template-rows: 30px 1fr 30px;">
+    <header>
+        #
+    </header>
+    <main>
+
+    </main>
+    <footer style="display: flex; justify-content: center;">
+        <time-left style="font-size: 1.5em;"></time-left>
+
+    </footer>
+</body>
+</html>
