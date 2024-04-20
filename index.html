@@ -89,11 +89,12 @@
 
             SWIPE_CARD.addEventListener('mousedown', function (e) {
                 console.log('started holding card');
+                MAIN.addEventListener('mousemove', observeMouseMove);
                 registerSwipeStart(e.clientX);
-                SWIPE_CARD.addEventListener('mousemove', observeMouseMove);
+                
             });
             
-
+            
            
 
             function observeSwipe(positionX) {
@@ -150,19 +151,18 @@
                 SWIPE_CARD.style.transform = `rotate(0deg)`;
                 MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
             }
-            SWIPE_CARD.addEventListener('mouseup', function (e) {
+
+            MAIN.addEventListener('mouseup', function (e) {
                 console.log('stopped holding card');
-                registerSwipeEnd() 
+                MAIN.removeEventListener('mousemove', observeMouseMove);
             
+                registerSwipeEnd() 
+                
             });
 
             SWIPE_CARD.addEventListener('touchend', function () {
                 console.log('stopped holding card');
-                
-
-                registerSwipeEnd() 
-                SWIPE_CARD.removeEventListener('mousemove', observeMouseMove);
-            
+                registerSwipeEnd()   
             });
             
 
