@@ -41,17 +41,16 @@
             transform-origin: bottom center;
         }
     </style>
-    <script>
 
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM is ready');
 
             setInterval(showTime, 1000);
 
-            swipeCard = document.querySelector('swipe-card');
-            swipeCard.addEventListener('click', function () {
-                console.log('Card clicked');
-            });
+            const deviceWidth = window.innerWidth;
+            const deviceHeight = window.innerHeight;
+
             let holdPosition = null;
             let holdTime = null;
             let holdTimeEnd = null;
@@ -59,34 +58,33 @@
             let holdTimeTotal = null;
             let holdPositionEnd = null;
             let cardHold = false;
+
+            const MAX_ROTAION = 33;
+            const MAX_DISTANCE = deviceWidth / 2;
+
+            swipeCard = document.querySelector('swipe-card');
+            swipeCard.addEventListener('click', function () {
+                console.log('Card clicked');
+            });
+            
             swipeCard.addEventListener('touchstart', function (e) {
-                console.log('started holding card');
                 holdPosition = e.touches[0].clientX;
                 holdTimeStart = new Date();
-
-                // start observing the touchmove event
-                
                 cardHold = true;
             });
 
             swipeCard.addEventListener('touchmove', function (e) {
                     if (cardHold) {
                         holdPositionEnd = e.touches[0].clientX;
-                        holdTimeEnd = new Date();
-                        holdTimeTotal = holdTimeEnd - holdTimeStart;
-                        const holdDistance = holdPositionEnd - holdPosition;
-                       
-                        console.log('holdDistance', holdDistance);
-
-                        // move the card
-                        // swipeCard.style.transform = `translateX(${holdDistance}px)`;
-                        // the card should move with the finger but the base should stay and it should instead rotate around the basis
-                        // the origin of the rotation should be the basis of the card
-                        // the card should rotate around the y-axis
-                        const maxDistance = 30;
-                        const rotateDegree = holdDistance / maxDistance * 30 /12;
-                        console.log('rotateDegree', rotateDegree);
-                        swipeCard.style.transform = `rotate(${rotateDegree}deg)`;
+                    
+                        const HOLD_DISTANCE = holdPositionEnd - holdPosition;
+                        const ROTATE_DEGREE = HOLD_DISTANCE / MAX_DISTANCE * 45 ;
+                        const ROTATE_DEGREE_ABS = Math.abs(ROTATE_DEGREE);
+                        const TOO_MUCH_ROTATION = ROTATE_DEGREE_ABS > MAX_ROTAION;
+                        const ROTATION_DIRECTION = ROTATE_DEGREE > 0 ? 1 : -1;
+                        const CARD_ROTATION = TOO_MUCH_ROTATION ? MAX_ROTAION * ROTATION_DIRECTION : ROTATE_DEGREE;
+                    
+                        swipeCard.style.transform = `rotate(${CARD_ROTATION}deg)`;
 
                         // 
                     }
@@ -94,6 +92,13 @@
             swipeCard.addEventListener('touchend', function () {
                 console.log('stopped holding card');
                 cardHold = false;
+
+                const CURRENT_TRANSFORM = parseInt(swipeCard.style.transform.split('(')[1].split(')')[0]);
+                console.log (CURRENT_TRANSFORM);
+                // if the degree is less then 7 degree reset it back to 0
+                if (Math.abs(CURRENT_TRANSFORM) < 22) {
+                    swipeCard.style.transform = `rotate(0deg)`;
+                }
             });
         });
 
