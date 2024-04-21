@@ -232,9 +232,8 @@ startDate.setHours(startDate.getHours() - 35);
 const dateEnd = new Date();
 //dateEnd.setDate(dateEnd.getDate() + 2);
 dateEnd.setHours(dateEnd.getHours() + 5);
+
 function showTime() {
-
-
     const dateNow = new Date() as Date;
     const timeStamp = dateNow.getTime() as number;
     const timeStampEnd = dateEnd.getTime() as number;
