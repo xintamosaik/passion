@@ -80,12 +80,22 @@ const MAX_ROTATION = 33;
  */
 const MAX_DISTANCE = DEVICE_WIDTH / 2;
 
+
+const startDate = new Date();
+// startDate.setDate(startDate.getDate() - 1);
+startDate.setHours(startDate.getHours() - 35);
+
+const dateEnd = new Date();
+//dateEnd.setDate(dateEnd.getDate() + 2);
+dateEnd.setHours(dateEnd.getHours() + 5);
+
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM is ready');
 
-   
+    const FOOTER = document.querySelector('footer') as HTMLElement;
 
     setInterval(showTime, 1000);
+
 
     /**
      * @var {HTMLElement} MAIN
@@ -107,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     // const SWIPE_CARD = document.querySelector('swipe-card');
     // type script way of the above
-    const SWIPE_CARD = document.querySelector('swipe-card') as HTMLElement;
+    const SWIPE_CARD = document.querySelector('#swipe-card') as HTMLElement;
     if (!SWIPE_CARD) {
         throw new Error('Swipe card element not found');
     }
@@ -134,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @returns {void}
      */
-    function observeMouseMove(e) {
+    function observeMouseMove(e: MouseEvent) {
         if (!cardHold) {
             return;
         }
@@ -222,18 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
         registerSwipeEnd();
     });
 
-
-
-});
-
-const startDate = new Date();
-// startDate.setDate(startDate.getDate() - 1);
-startDate.setHours(startDate.getHours() - 35);
-const dateEnd = new Date();
-//dateEnd.setDate(dateEnd.getDate() + 2);
-dateEnd.setHours(dateEnd.getHours() + 5);
-
-function showTime() {
+    function showTime() {
     const dateNow = new Date() as Date;
     const timeStamp = dateNow.getTime() as number;
     const timeStampEnd = dateEnd.getTime() as number;
@@ -259,7 +258,7 @@ function showTime() {
     const timeLeft = `${daysLeftString} days and ${hoursLeftString}:${minutesLeftString}:${secondsLeftString}`;
 
 
-    const timeLeftElement = document.querySelector('time-left') as HTMLElement;
+    const timeLeftElement = document.querySelector('#time-left') as HTMLElement;
     if (!timeLeftElement) {
         throw new Error('Time left element not found');
     }
@@ -277,8 +276,13 @@ function showTime() {
     const progress = elapsed / timeFrame as number;
 
 
-    const footer = document.querySelector('footer') as HTMLElement;
+    
     // Construct a left to right gradient
-    footer.style.background = `linear-gradient(to right, #a00a ${progress * 100}%, #eee3 ${progress * 100}%)`;
+    FOOTER.style.background = `linear-gradient(to right, #a00a ${progress * 100}%, #eee3 ${progress * 100}%)`;
 
 }
+
+
+});
+
+

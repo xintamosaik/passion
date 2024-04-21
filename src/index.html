@@ -15,7 +15,7 @@
 
 </head>
 
-<body class="grid grid-rows-3 min-h-screen dark:bg-slate-900 dark:text-white light:bg-white light:text-black">
+<body class="min-h-screen dark:bg-slate-900 dark:text-white light:bg-white light:text-black">
     <header id="statistics" class="block text-center">
 
         <table class="w-full">
@@ -41,26 +41,20 @@
                 </td>
             </tr>
         </table>
-
     </header>
-    <style>
-
-
-    </style>
+ 
     <main class="d-flex justify-content-center align-items-center">
 
-        <card-space
-            class="d-flex justify-content-center flex-wrap max-w-full min-w-80 bg-darkolivegreen border border-black rounded-4  p-4 m-2">
-            <swipe-card>
+        <div id="card-space"
+            class="d-flex justify-content-center flex-wrap max-w-full bg-darkolivegreen border border-red-100 rounded-4 p-4 m-2">
+            <div id="swipe-card" class="block dark:bg-slate-700 light:bg-white dark:text-white light:text-black border border-black rounded-4 p-4 m-2">
                 <h1>Card 1</h1>
                 <p>Some text</p>
-            </swipe-card>
-
-
-        </card-space>
+            </div>
+        </div>
     </main>
-    <footer style="display: flex; justify-content: center;">
-        <time-left style="font-size: 1.5em;"></time-left>
+    <footer class="flex justify-content-center">
+        <div id="time-left"></div>
 
     </footer>
 </body>
