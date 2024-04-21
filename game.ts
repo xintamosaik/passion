@@ -53,7 +53,7 @@ const DEVICE_HEIGHT = window.innerHeight;
  * @var {number} holdPosition
  * @description a position of the mouse or touch when the swipe starts
  */
-let holdPosition = null;
+let holdPosition = 0;
 
 /**
  * @var {boolean} cardHold
@@ -94,7 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
      * @constant
      */
     const MAIN = document.querySelector('main');
-    
+    if (!MAIN) {
+        throw new Error('Main element not found');
+    }
     MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
     
     /**
@@ -103,8 +105,12 @@ document.addEventListener('DOMContentLoaded', function () {
      * @description The swipe card element
      * @constant
      */
-    const SWIPE_CARD = document.querySelector('swipe-card');
-
+    // const SWIPE_CARD = document.querySelector('swipe-card');
+    // type script way of the above
+    const SWIPE_CARD = document.querySelector('swipe-card') as HTMLElement;
+    if (!SWIPE_CARD) {
+        throw new Error('Swipe card element not found');
+    }
     /**
      * @description Registers the start of the swipe. It sets the hold position and sets the cardHold flag to true
      * 
@@ -117,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cardHold = true;
     }
 
-    SWIPE_CARD.addEventListener('touchstart', function (e) {
+    SWIPE_CARD.addEventListener('touchstart', function (e: TouchEvent) {
         registerSwipeStart(e.touches[0].clientX);
     });
 
@@ -135,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         observeSwipe(e.clientX);
     }
 
-    SWIPE_CARD.addEventListener('mousedown', function (e) {
+    SWIPE_CARD.addEventListener('mousedown', function (e: MouseEvent) {
         MAIN.addEventListener('mousemove', observeMouseMove);
         registerSwipeStart(e.clientX);
     });
@@ -158,20 +164,22 @@ document.addEventListener('DOMContentLoaded', function () {
         const ROTATION_DIRECTION = ROTATE_DEGREE > 0 ? 1 : -1;
         const CARD_ROTATION = TOO_MUCH_ROTATION ? MAX_ROTATION * ROTATION_DIRECTION : ROTATE_DEGREE;
 
-        SWIPE_CARD.style.transform = `rotate(${CARD_ROTATION}deg)`;
-
+        if (SWIPE_CARD) {
+            SWIPE_CARD.style.transform = `rotate(${CARD_ROTATION}deg)`;
+        }
         // color main with degree
         const HUE = CARD_ROTATION / MAX_ROTATION * 60 - 60;
         const SATURATION = Math.abs(CARD_ROTATION / MAX_ROTATION * 50);
         const LIGHTNESS = Math.abs(CARD_ROTATION / MAX_ROTATION * 25);
-
-        MAIN.style.backgroundColor = `hsl(${HUE}, ${SATURATION}%, ${LIGHTNESS}%)`;
-
+        
+        if (MAIN) {
+            MAIN.style.backgroundColor = `hsl(${HUE}, ${SATURATION}%, ${LIGHTNESS}%)`;
+        }
 
 
     }
 
-    SWIPE_CARD.addEventListener('touchmove', function (e) {
+    SWIPE_CARD.addEventListener('touchmove', function (e : TouchEvent) {
         observeSwipe(e.touches[0].clientX);
     });
 
@@ -181,13 +189,22 @@ document.addEventListener('DOMContentLoaded', function () {
     function registerSwipeEnd() {
 
         cardHold = false;
-
-        const CURRENT_TRANSFORM = parseInt(SWIPE_CARD.style.transform.split('(')[1].split(')')[0]);
+        if (!SWIPE_CARD) {
+            return;
+        }
+        
+        const CURRENT_TRANSFORM = parseInt((SWIPE_CARD as HTMLElement).style.transform.split('(')[1].split(')')[0]);
 
         // if the degree is less then 7 degree reset it back to 0
         if (Math.abs(CURRENT_TRANSFORM) < 22) {
-            SWIPE_CARD.style.transform = `rotate(0deg)`;
-            MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
+            if (SWIPE_CARD) {
+                SWIPE_CARD.style.transform = `rotate(0deg)`;
+                
+            }
+            
+            if (MAIN) {
+                MAIN.style.backgroundColor = `hsl(0, 0%, 0%)`;
+            }
         }
 
         cardHold = false;
@@ -218,44 +235,50 @@ dateEnd.setHours(dateEnd.getHours() + 5);
 function showTime() {
 
 
-    const dateNow = new Date();
-    const timeStamp = dateNow.getTime();
-    const timeStampEnd = dateEnd.getTime();
+    const dateNow = new Date() as Date;
+    const timeStamp = dateNow.getTime() as number;
+    const timeStampEnd = dateEnd.getTime() as number;
 
-    const diff = timeStampEnd - timeStamp;
+    const diff = timeStampEnd - timeStamp as number;
 
 
-    const secondsLeft = diff / MILLISECONDS;
-    const minutesLeft = secondsLeft / SECONDS;
-    const hoursLeft = minutesLeft / MINUTES;
-    const daysLeft = hoursLeft / HOURS;
+    const secondsLeft = diff / MILLISECONDS as number;
+    const minutesLeft = secondsLeft / SECONDS as number;
+    const hoursLeft = minutesLeft / MINUTES as number;
+    const daysLeft = hoursLeft / HOURS as number;
 
-    const daysLeftInt = Math.floor(daysLeft);
-    const hoursLeftInt = Math.floor(hoursLeft % HOURS);
-    const minutesLeftInt = Math.floor(minutesLeft % MINUTES);
-    const secondsLeftInt = Math.floor(secondsLeft % SECONDS);
+    const daysLeftInt = Math.floor(daysLeft) as number;
+    const hoursLeftInt = Math.floor(hoursLeft % HOURS) as number;
+    const minutesLeftInt = Math.floor(minutesLeft % MINUTES) as number;
+    const secondsLeftInt = Math.floor(secondsLeft % SECONDS) as number;
 
-    const secondsLeftString = secondsLeftInt < 10 ? '0' + secondsLeftInt : secondsLeftInt;
-    const minutesLeftString = minutesLeftInt < 10 ? '0' + minutesLeftInt : minutesLeftInt;
-    const hoursLeftString = hoursLeftInt < 10 ? '0' + hoursLeftInt : hoursLeftInt;
-    const daysLeftString = daysLeftInt < 10 ? '0' + daysLeftInt : daysLeftInt;
+    const secondsLeftString = secondsLeftInt < 10 ? '0' + secondsLeftInt : `${secondsLeftInt}` as string;
+    const minutesLeftString = minutesLeftInt < 10 ? '0' + minutesLeftInt :  `${minutesLeftInt}` as string;
+    const hoursLeftString = hoursLeftInt < 10 ? '0' + hoursLeftInt : `${hoursLeftInt}` as string;
+    const daysLeftString = daysLeftInt < 10 ? '0' + daysLeftInt : `${daysLeftInt}` as string;
 
     const timeLeft = `${daysLeftString} days and ${hoursLeftString}:${minutesLeftString}:${secondsLeftString}`;
 
 
-    const timeLeftElement = document.querySelector('time-left');
+    const timeLeftElement = document.querySelector('time-left') as HTMLElement;
+    if (!timeLeftElement) {
+        throw new Error('Time left element not found');
+    }
     timeLeftElement.innerText = timeLeft + ' left';
 
 
-    const elapsed = dateNow - startDate;
+    // const elapsed = dateNow - startDate;
+    // The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    const elapsed = dateNow.getTime() - startDate.getTime() as number;
 
-    const timeFrame = dateEnd - startDate;
+    // const timeFrame = dateEnd - startDate;
+    const timeFrame = dateEnd.getTime() - startDate.getTime() as number;
 
 
-    const progress = elapsed / timeFrame;
+    const progress = elapsed / timeFrame as number;
 
 
-    const footer = document.querySelector('footer');
+    const footer = document.querySelector('footer') as HTMLElement;
     // Construct a left to right gradient
     footer.style.background = `linear-gradient(to right, #a00a ${progress * 100}%, #eee3 ${progress * 100}%)`;
 
